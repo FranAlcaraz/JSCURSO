@@ -56,6 +56,7 @@ for (const producto of productos){
     console.log(producto.precio);
 }
 
+
 };
 function agregarProducto(nombre, precio, stock, categoria){
     nombre = prompt("ingrese nombre");
@@ -69,8 +70,6 @@ function agregarProducto(nombre, precio, stock, categoria){
 
 };
 
-
-productos.push(new producto("Pantalon Javi", 3000, 10, "pantalones"));
 
 
 mostrarProductos();

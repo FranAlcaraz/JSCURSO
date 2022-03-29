@@ -23,12 +23,22 @@ function agregarProducto(nombre, precio, stock, categoria){
 
 };
 
+let bodyTable = document.getElementById("cuerpo");
+  
+function completarTabla() {
+  productos.forEach((producto) => {
+    let div = document.createElement("div");
+    div.className="card";
+    div.innerHTML =` <div class='card-body'><h5 class='card-title'>${producto.nombre} </h5> <p class='card-text'>$ ${producto.precio}</p><p class='card-text'>Stock: ${producto.stock}</p></div>`
+    bodyTable.appendChild(div);
+  });
+}
 
 
 productos.push(new producto("Pantalon Javi", 3000, 10, "pantalones"));
 productos.push(new producto("Remera Afrik", 3420, 11, "remeras"));
 productos.push(new producto("Remeron js", 2000, 5, "remeras"));
-agregarProducto();
+//agregarProducto();
 
 
 function ordenarPrecio(){
@@ -36,8 +46,8 @@ function ordenarPrecio(){
     var index = 1;
     let stringOrdenado = "";
     ordenadosPrecio = productos.map(elemento => elemento);
- 
- 
+    
+    
     ordenadosPrecio.sort(function(a,b){
         return a.precio - b.precio;
     });
@@ -53,38 +63,38 @@ ordenarPrecio();
 
 
 function mostrarProductos (){
-
+    
     for (const producto of productos){
         console.log(producto.nombre);
         console.log(producto.precio);
     }
     
     
-    };
+};
 
-    mostrarProductos();
+mostrarProductos();
 
-    function mostrarPantalones(){
- 
-        const pantalones = productos.filter ((prod) => 
-        prod.categoria.includes("pantalones"));
-        console.log(pantalones);
-
+function mostrarPantalones(){
     
-    }
-
-    function mostrarRemeras(){
- 
-        const remeras = productos.filter ((prod) => 
-        prod.categoria.includes("remeras"));
-        console.log(remeras);
-
-    }
-
-
-    mostrarPantalones();
-
-    mostrarRemeras();
-
-
+    const pantalones = productos.filter ((prod) => 
+    prod.categoria.includes("pantalones"));
+    console.log(pantalones);
     
+    
+}
+
+function mostrarRemeras(){
+    
+    const remeras = productos.filter ((prod) => 
+    prod.categoria.includes("remeras"));
+    console.log(remeras);
+    
+}
+
+
+mostrarPantalones();
+
+mostrarRemeras();
+
+completarTabla();
+

@@ -1,17 +1,27 @@
 'use strict'
 
-const productos = [];
-
-
-class producto{
-    constructor(nombre, precio, stock, categoria){
-        this.nombre = nombre;
-        this.precio = precio;
-        this.stock= stock;
-        this.categoria = categoria;
+class producto {
+    constructor(nombre, categoria, precio, stock, img) {
+      this.nombre = nombre;
+      this.precio = parseFloat(precio);
+      this.disponible = true;
+      this.stock = stock;
+      this.categoria = categoria;
+      this.img = img;
     }
-};
-
+  
+    visualizar() {
+      return this.nombre + " " + this.precio;
+    }
+  
+    sumarIva() {
+      this.precio = this.precio * 1.21;
+    }
+  
+    vender() {
+      this.disponible = false;
+    }
+  }
 
 function agregarProducto(nombre, precio, stock, categoria){
     nombre = prompt("ingrese nombre");
@@ -24,23 +34,20 @@ function agregarProducto(nombre, precio, stock, categoria){
 };
 
 let bodyTable = document.getElementById("cuerpo");
-  
+
+//visualizar productos DOM
 function completarTabla() {
-  productos.forEach((producto) => {
-    let div = document.createElement("div");
-    div.className="card";
-    div.innerHTML =` <div class='card-body'><h5 class='card-title'>${producto.nombre} </h5> <p class='card-text'>$ ${producto.precio}</p><p class='card-text'>Stock: ${producto.stock}</p></div>`
-    bodyTable.appendChild(div);
-  });
-}
+    productos.forEach((producto) => {
+      let div = document.createElement("div");
+      div.className="card";
+      div.innerHTML =`<img src=${producto.img} class='card-img-top'> <div class='card-body'><h5 class='card-title'>${producto.nombre} </h5> <p class='card-text'>$ ${producto.precio}</p><p class='card-text'>Stock: ${producto.stock}</p></div>`
+      bodyTable.appendChild(div);
+    });
+  }
+completarTabla();
 
 
-productos.push(new producto("Pantalon Javi", 3000, 10, "pantalones"));
-productos.push(new producto("Remera Afrik", 3420, 11, "remeras"));
-productos.push(new producto("Remeron js", 2000, 5, "remeras"));
-//agregarProducto();
-
-
+//funcion para consola
 function ordenarPrecio(){
     var ordenadosPrecio = [];
     var index = 1;
@@ -59,42 +66,89 @@ function ordenarPrecio(){
 }
 
 ordenarPrecio();
+//fin funcion consola
 
-
-
-function mostrarProductos (){
+function filtrarTabla(array) {
+    array.forEach((producto) => {
+        let div = document.createElement("div");
+        div.className="card";
+      div.innerHTML =`<img src=${producto.img} class='card-img-top'> <div class='card-body'><h5 class='card-title'>${producto.nombre} </h5> <p class='card-text'>$ ${producto.precio}</p><p class='card-text'>Stock: ${producto.stock}</p></div>`
+    bodyTable.appendChild(div);
+    });
+  }
+  
+  
+  let elegirPorqueFiltrar = document.querySelectorAll('input[type="radio"]');
+  
+  console.log(elegirPorqueFiltrar);
+  
+  elegirPorqueFiltrar.forEach((check) => console.log(check));
+  
+  
+  elegirPorqueFiltrar.forEach((check) =>
+    check.addEventListener("change", handleChange),
+  );
+  
+  
+  
+  function handleChange() {
     
-    for (const producto of productos){
-        console.log(producto.nombre);
-        console.log(producto.precio);
+    bodyTable.innerHTML = "";
+  
+    
+    const checkeds = Array.from(elegirPorqueFiltrar).filter(
+      (checkbox) => checkbox.checked,
+    );
+  
+    
+    const checkedValue = checkeds.map((checkbox) => checkbox.value);
+  
+    
+    let ArrayFilter = [];
+  
+  
+    if (checkedValue == "all") {
+      
+      ArrayFilter = productos;
+    } else if (checkedValue == "pantalon") {
+      
+      ArrayFilter = productos.filter(
+        (producto) => producto.categoria == "pantalon",
+      );
+    } else if (checkedValue == "blusa") {
+      
+      ArrayFilter = productos.filter(
+        (producto) => producto.categoria == "blusa",
+      );
+    } else if (checkedValue == "entero") {
+      
+      ArrayFilter = productos.filter(
+        (producto) => producto.categoria == "entero",
+      );
+    } else if (checkedValue == "top") {
+      
+      ArrayFilter = productos.filter((producto) => producto.categoria == "top");
+    } else if (checkedValue == "vestido") {
+      
+      ArrayFilter = productos.filter(
+        (producto) => producto.categoria == "vestido",
+      );
     }
-    
-    
-};
+  
+  
+  
+    filtrarTabla(ArrayFilter);
+  }
 
-mostrarProductos();
 
-function mostrarPantalones(){
-    
-    const pantalones = productos.filter ((prod) => 
-    prod.categoria.includes("pantalones"));
-    console.log(pantalones);
-    
-    
+  function guardarLista(){
+    localStorage.setItem("listaProductos",JSON.stringify(productos));
+    console.log("La lista se ha guardado con " + productos.length + " productos:");
+    for(producto of productos){
+        console.log(producto.toString());
+    }
 }
 
-function mostrarRemeras(){
-    
-    const remeras = productos.filter ((prod) => 
-    prod.categoria.includes("remeras"));
-    console.log(remeras);
-    
-}
+guardarLista();
 
-
-mostrarPantalones();
-
-mostrarRemeras();
-
-completarTabla();
 
